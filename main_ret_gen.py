@@ -325,6 +325,6 @@ if __name__ == "__main__":
     # my_benchmark = benchmark_gptj("/home/wentaoy4/lgm/data/model_file/EleutherAI--gpt-j-6B.main.918ad376364058dee23512629bc385380c98e57d/")
     # my_benchmark.eval("/home/wentaoy4/lgm/data/logger/gptj-coqa.log")
     
-    my_chatbot = ret_gen_model(dataset_path = "/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset/", index_path = "/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset.faiss",device=my_device)
+    my_chatbot = ret_gen_model(dataset_path = "./dataset/ece_rag_dataset_new/squad-dataset/", index_path = "./dataset/ece_rag_dataset_new/squad-dataset.faiss",device=my_device)
     # my_chatbot.odqa_chatbot()
     my_chatbot.cqa_chatbot()
