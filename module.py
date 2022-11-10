@@ -55,20 +55,25 @@ class rag_retreiver():
         return total_doc,docs_dict,doc_scores 
 
 class opt_model():
-    def __init__(self,model_path,device):
+    def __init__(self,model_path,device = torch.device("cuda:1")):
         super(opt_model,self).__init__()
         # self.device = torch.device("cuda:0")
         self.device = device
-        self.gptj = OPTForCausalLM.from_pretrained(model_path).to(self.device)
+        self.model = OPTForCausalLM.from_pretrained(model_path).to(self.device)
         self.tokenizer = GPT2Tokenizer.from_pretrained(model_path)
     def text_gen(self,input_text:str,max_len:int = 200):
         inputs = self.tokenizer(input_text, return_tensors="pt").to(self.device)
-        outputs = self.gptj.generate(**inputs,max_length = max_len,do_sample = True,early_stopping = True,temperature=0.8, top_p = 0.9)
+        outputs = self.model.generate(**inputs,max_length = max_len,do_sample = True,early_stopping = True,temperature=0.8, top_p = 0.9)
         out_text = self.tokenizer.batch_decode(outputs)[0]
         return out_text
+    def train_loss_ids(self,input_ids,label_ids):
+        data = input_ids.to(self.device)
+        outputs = self.model(data,labels = data)
+        loss = outputs.loss.mean()
+        return loss
 
 class seq2seq_model():
-    def __init__(self,model_path,device):
+    def __init__(self,model_path = 'google/flan-t5-large',device = torch.device("cuda:1")):
         super(seq2seq_model,self).__init__()
         self.device = device 
         self.model = T5ForConditionalGeneration.from_pretrained(model_path).to(self.device)
@@ -78,6 +83,15 @@ class seq2seq_model():
         outputs = self.model.generate(input_ids,max_new_tokens = max_len)
         out_text = self.tokenizer.batch_decode(outputs,skip_special_tokens =True)[0]
         return out_text
+    def train_loss_ids(self,input_ids,label_ids):
+        outputs = self.model(input_ids = input_ids.to(self.device),labels = label_ids.to(self.device))
+        loss = outputs.loss
+        return loss
+    def train_loss_text(self,input_text,label_text):
+        input_ids = self.tokenizer(input_text,return_tensors = 'pt').input_ids.to(self.device)
+        labels = self.tokenizer(label_text,return_tensors = 'pt').input_ids.to(self.device)
+        outputs = self.model(input_ids = input_ids, labels = labels)
+        return outputs.loss
 
 class gpt_j():
     def __init__(self,model_path,device):
