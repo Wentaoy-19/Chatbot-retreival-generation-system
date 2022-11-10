@@ -11,6 +11,7 @@ import accelerate
 import logging 
 import argparse
 #
+import numpy as np
 from module import *
 from data_utils import *
 from model_utils import *
@@ -41,8 +42,10 @@ def train_one_epoch(model,
     optimizer,
     logger,
     outer_batch,
-    saved_model_path
+    saved_model_path,
+    epoch
 ):
+    losses = []
     for idx,data in enumerate(dataloader):
         input_ids = data['input_ids']
         labels = data['labels']
@@ -52,8 +55,9 @@ def train_one_epoch(model,
             optimizer.step()
             optimizer.zero_grad()
             model.model.zero_grad()
-            logger.info(f"Loss: {loss.detach()}")
-            # logger.info("Loss: ",str(loss.detach()))
+            print(f"Loss: {loss.detach().item()}")
+            losses.append(loss.detach().item())
+    logger.info(f"Epoch: {epoch}  Loss: {np.array(losses).mean()}")
     model.save_checkpoint(saved_model_path)
     return 
         
@@ -70,7 +74,7 @@ def _finetune(
     model.model.train()
     optimizer = AdamW(model.model.parameters(),lr = lr)
     for epoch in range(epochs):
-        train_one_epoch(model,dataloader,optimizer,logger,outer_batch_size,saved_model_path)
+        train_one_epoch(model,dataloader,optimizer,logger,outer_batch_size,saved_model_path,epoch)
     return 
 
 
@@ -122,7 +126,6 @@ if __name__ == "__main__":
     args = train_arg_parse()
     if(args.model_name == 'opt'):
         main_opt_finetune(dataset_path=args.dataset_path,
-                          # model_path = "/raid/projects/wentaoy4/model_file/models--facebook--opt-2.7b/snapshots/a5227ab620eddb25d88a19fe5c0d6a3548bcee88/",
                           model_path = args.model_path,
                           device = torch.device(args.device),
                           logger_path=args.logger_path,
@@ -131,17 +134,16 @@ if __name__ == "__main__":
                           outer_batch_size=args.outer_batch_size,
                           epochs = args.epochs,
                           lr = args.lr)
-        
-        
-        
-    # main_opt_finetune(dataset_path="/raid/projects/wentaoy4/save_dataset",
-    #                   # model_path = "/raid/projects/wentaoy4/model_file/models--facebook--opt-2.7b/snapshots/a5227ab620eddb25d88a19fe5c0d6a3548bcee88/",
-    #                   model_path = "/raid/projects/wentaoy4/model_file/models--facebook--opt-1.3b/snapshots/c8fd4232a5df1e87e06d5cbb9e066c5a114cd4ee/",
-    #                   device = torch.device("cuda:0"),
-    #                   logger_path="/raid/projects/wentaoy4/log/temp.log",
-    #                   saved_model_path="/raid/projects/wentaoy4/model_weight/opt_temp.pt",
-    #                   batch_size=2,
-    #                   outer_batch_size=16,
-    #                   epochs = 10,
-    #                   lr = 1e-5)
+    elif(args.model_name == 't5'):
+        main_t5_finetune(
+            dataset_path=args.dataset_path,
+            model_path= args.model_path,
+            device= torch.device(args.device),
+            logger_path=args.logger_path,
+            saved_model_path=args.saved_model_path,
+            batch_size = args.batch_size,
+            outer_batch_size =args.outer_batch_size,
+            epochs = args.epochs,
+            lr = args.lr
+            )
     

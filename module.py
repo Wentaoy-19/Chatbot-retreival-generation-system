@@ -15,6 +15,8 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 '''
     Model Classes
 '''
+
+# DPR model class
 class rag_retreiver():
     def __init__(self,dataset_path, index_path,device):
         super(rag_retreiver,self).__init__()
@@ -54,6 +56,7 @@ class rag_retreiver():
             total_doc.append(self.dataset[idx]['text'])
         return total_doc,docs_dict,doc_scores 
 
+# OPT model class 
 class opt_model():
     def __init__(self,model_path,device = torch.device("cuda:1")):
         super(opt_model,self).__init__()
@@ -63,9 +66,12 @@ class opt_model():
         self.tokenizer = GPT2Tokenizer.from_pretrained(model_path)
     def text_gen(self,input_text:str,max_len:int = 200):
         inputs = self.tokenizer(input_text, return_tensors="pt").to(self.device)
-        outputs = self.model.generate(**inputs,max_length = max_len,do_sample = True,early_stopping = True,temperature=0.8, top_p = 0.9)
-        out_text = self.tokenizer.batch_decode(outputs)[0]
+        outputs = self.model.generate(**inputs,max_length = max_len,do_sample = True,early_stopping = False,temperature=0.8, top_p = 0.9)
+        out_text = self.tokenizer.batch_decode(outputs,skip_special_tokens = True)[0]
         return out_text
+    def answer_question(self,context:str,question:str,max_len:int = 500):
+        prompt = "Answer question from context:" + context.replace("\n"," ") + "\nQuestion:" + question.replace("\n"," ") + "\nAnswer:"
+        return self.text_gen(prompt,max_len)
     def train_loss_ids(self,input_ids,label_ids):
         data = input_ids.to(self.device)
         outputs = self.model(data,labels = data)
@@ -76,7 +82,11 @@ class opt_model():
             self.model.state_dict(),
             saved_path,
         )
+    def load_checkpoint(self,cp_path):
+        cp = torch.load(cp_path)
+        self.model.load_state_dict(cp)
 
+# T5 model class
 class seq2seq_model():
     def __init__(self,model_path = 'google/flan-t5-large',device = torch.device("cuda:1")):
         super(seq2seq_model,self).__init__()
@@ -97,7 +107,16 @@ class seq2seq_model():
         labels = self.tokenizer(label_text,return_tensors = 'pt').input_ids.to(self.device)
         outputs = self.model(input_ids = input_ids, labels = labels)
         return outputs.loss
+    def save_checkpoint(self,saved_path):
+        torch.save(
+            self.model.state_dict(),
+            saved_path,
+        )
+    def load_checkpoint(self,cp_path):
+        cp = torch.load(cp_path)
+        self.model.load_state_dict(cp)
 
+# GPT-J model class
 class gpt_j():
     def __init__(self,model_path,device):
         super(gpt_j,self).__init__()
@@ -169,6 +188,7 @@ class benchmark_gptj():
             logger.info(info_text)
         return     
     
+# Question Rewrite model class
 class qr_model():
     def __init__(self,device):
         super(qr_model,self).__init__()

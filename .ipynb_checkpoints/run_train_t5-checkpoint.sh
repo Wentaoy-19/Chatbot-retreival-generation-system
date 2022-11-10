@@ -1,0 +1,11 @@
+python finetune.py \
+    --model_name "t5" \
+    --dataset_path "/raid/projects/wentaoy4/save_dataset" \
+    --model_path "/raid/projects/wentaoy4/model_file/models--google--flan-t5-large/snapshots/f5b192378f2e16fb61561ee418736e8c6841c4c8/" \
+    --device "cuda:0" \
+    --logger_path "/raid/projects/wentaoy4/log/t5_train.log" \
+    --saved_model_path "/raid/projects/wentaoy4/model_weight/t5_finetune.pt" \
+    --batch_size 1 \
+    --outer_batch_size 32 \
+    --epochs 10 \
+    --lr 1e-5

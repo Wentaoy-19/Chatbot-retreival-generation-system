@@ -173,6 +173,10 @@ def opt_json2dataset(original_path,saved_json_path, saved_dataset_path):
 def download_model(checkpoint ='facebook/opt-13b', cache_dir = "./"):
     weights_path = snapshot_download(checkpoint,cache_dir = cache_dir)   
 
+    
+'''
+    dataset class
+'''
 class opt_finetune_dataset(Dataset):
     def __init__(self,converted_dataset,tokenizer):
         self.tokenizer = tokenizer
@@ -232,7 +236,7 @@ class t5_finetune_dataset(Dataset):
         for i in range(self.data_num):
             context = self.trun_text(self.converted_dataset[i]['textbook-paragraph'],400)
             question = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['question']
-            answer = self.trun_text(self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer'],100)
+            answer = self.trun_text(self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer'],200)
             prompt = self.generate_prompt(context,question)
             prompt_ids = self.tokenizer(prompt,return_tensors = 'pt').input_ids[0]
             label_ids = self.tokenizer(answer.replace("\n"," "),return_tensors = 'pt').input_ids[0]
@@ -247,13 +251,5 @@ class t5_finetune_dataset(Dataset):
 if __name__ == "__main__":
     opt_json2dataset('../data-generator/prompt_engineering/gpt-3_semantic_search/GPT-3_semantic_search.json',saved_json_path = "./saved.json", saved_dataset_path ="./save_dataset")
 
-# if __name__ =="__main__":
-#     # squad_dataset = load_dataset("squad")
-#     # squad_to_csv(squad_dataset,csv_path = "/home/wentaoy4/lgm/squad_qa_context.csv")
-#     # _convert_cqa_csv("../data/csv_data/squad_val_cqa.csv")
-#     csv_to_dataset(csv_path ="../data/csv_data/squad_val_cqa.csv",
-#                    saved_path = "../data/convert_dataset/squad_val_cqa_dataset")
-#     # convert_csv(txt_path="/home/wentaoy4/lgm/convert_txt/",csv_file="/home/wentaoy4/lgm/ece120.csv")
-#     # _convert_csv(csv_file = "../data/csv_data/squad_val.csv")
 
     
