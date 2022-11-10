@@ -71,6 +71,11 @@ class opt_model():
         outputs = self.model(data,labels = data)
         loss = outputs.loss.mean()
         return loss
+    def save_checkpoint(self,saved_path):
+        torch.save(
+            self.model.state_dict(),
+            saved_path,
+        )
 
 class seq2seq_model():
     def __init__(self,model_path = 'google/flan-t5-large',device = torch.device("cuda:1")):
