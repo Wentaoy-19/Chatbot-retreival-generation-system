@@ -51,12 +51,11 @@ def train_one_epoch(model,
             optimizer.step()
             optimizer.zero_grad()
             model.model.zero_grad()
-            logger.info("Loss: ",loss.item())
+            logger.info(f"Loss: {loss.detach()}")
+            # logger.info("Loss: ",str(loss.detach()))
     model.save_checkpoint(saved_model_path)
     return 
         
-            
-
 def _finetune(
     dataloader,
     model,
@@ -74,11 +73,12 @@ def _finetune(
     return 
 
 
-def opt_finetune_main(
+def main_opt_finetune(
     dataset_path,
     model_path,
     device,
     logger_path,
+    saved_model_path,
     batch_size = 2,
     outer_batch_size = 4,
     epochs = 50, 
@@ -86,15 +86,27 @@ def opt_finetune_main(
 ):
     train_device = device
     train_model = opt_model(model_path,train_device)
-    train_dataset = opt_finetune_dataset(dataset_path)
+    train_dataset = opt_finetune_dataset(dataset_path,train_model.tokenizer)
     train_dataloader = DataLoader(train_dataset,batch_size = batch_size, shuffle=True)
     train_logger = get_logger(logger_path)
     train_logger.info("Start Training")
-    _finetune(train_dataloader,train_model,epochs, lr, outer_batch_size,train_logger)
+    _finetune(train_dataloader,train_model,epochs, lr, outer_batch_size,saved_model_path,train_logger)
     train_logger.info("Finish Training")
     return 
     
     
+
+if __name__ == "__main__":
+    main_opt_finetune(dataset_path="../saved_data",
+                    #   model_path="../lgm/data/model_file/models--facebook--opt-2.7b/snapshots/c9c15109b9dac40871c063892227d45b85cb3952/",
+                      model_path = "facebook/opt-350m",
+                      device = torch.device("cuda:1"),
+                      logger_path="../temp_logger.log",
+                      saved_model_path="../temp.pt",
+                      batch_size=2,
+                      outer_batch_size=16,
+                      epochs = 10,
+                      lr = 1e-5)
     
     
         
