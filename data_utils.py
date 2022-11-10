@@ -203,8 +203,8 @@ class opt_finetune_dataset(Dataset):
             # context = self.converted_dataset[i]['textbook-paragraph']
             context = self.trun_text(self.converted_dataset[i]['textbook-paragraph'],400)
             question = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['question']
-            # answer = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer']
-            answer = self.trun_text(self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer'],100)
+            answer = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer']
+            # answer = self.trun_text(self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer'],100)
             prompt = self.generate_prompt(context,question,answer)
             prompt_ids = self.tokenizer(prompt,return_tensors = 'pt').input_ids[0]
             final.append(prompt_ids)
@@ -236,7 +236,7 @@ class t5_finetune_dataset(Dataset):
         for i in range(self.data_num):
             context = self.trun_text(self.converted_dataset[i]['textbook-paragraph'],400)
             question = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['question']
-            answer = self.trun_text(self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer'],200)
+            answer = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer']
             prompt = self.generate_prompt(context,question)
             prompt_ids = self.tokenizer(prompt,return_tensors = 'pt').input_ids[0]
             label_ids = self.tokenizer(answer.replace("\n"," "),return_tensors = 'pt').input_ids[0]

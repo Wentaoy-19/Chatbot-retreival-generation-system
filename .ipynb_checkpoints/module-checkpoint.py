@@ -69,9 +69,9 @@ class opt_model():
         outputs = self.model.generate(**inputs,max_length = max_len,do_sample = True,early_stopping = False,temperature=0.8, top_p = 0.9)
         out_text = self.tokenizer.batch_decode(outputs,skip_special_tokens = True)[0]
         return out_text
-    def answer_question(self,context:str,question:str,max_len:int = 500):
+    def answer_question(self,context:str,question:str,max_len:int = 300):
         prompt = "Answer question from context:" + context.replace("\n"," ") + "\nQuestion:" + question.replace("\n"," ") + "\nAnswer:"
-        return self.text_gen(prompt,max_len)
+        return self.text_gen(prompt,max_len).split("\nAnswer:")[1]
     def train_loss_ids(self,input_ids,label_ids):
         data = input_ids.to(self.device)
         outputs = self.model(data,labels = data)
@@ -98,6 +98,9 @@ class seq2seq_model():
         outputs = self.model.generate(input_ids,max_new_tokens = max_len)
         out_text = self.tokenizer.batch_decode(outputs,skip_special_tokens =True)[0]
         return out_text
+    def answer_question(self,context:str,question:str,max_len:int = 100):
+        prompt = "Answer question from context:\nContext:" + context.replace("\n"," ") + "\nQuestion:"+question.replace("\n"," ") + "\nAnswer:"
+        return self.generate(prompt,max_len)
     def train_loss_ids(self,input_ids,label_ids):
         outputs = self.model(input_ids = input_ids.to(self.device),labels = label_ids.to(self.device))
         loss = outputs.loss
