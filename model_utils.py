@@ -18,6 +18,19 @@ def train_arg_parse():
     args = parser.parse_args()
     return args 
 
+def main_arg_parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_name',type = str,default = 'opt')
+    parser.add_argument('--dataset_path',type = str, default = '/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset/')
+    parser.add_argument('--index_path',type= str,default = '/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset.faiss' )
+    parser.add_argument('--gen_model_path',type = str, default = 'facebook/opt-1.3b')
+    parser.add_argument('--gen_cp_path',type = str,default = None)
+    parser.add_argument('--logger_path',type = str, default = None)
+    parser.add_argument('--device',type = str,default = 'cuda:0')
+    args = parser.parse_args()
+    return args
+    
+
 def get_logger(filename, verbosity=1, name = None):
     level_dict = {0: logging.DEBUG, 1:logging.INFO, 2: logging.WARNING}
     formatter = logging.Formatter(

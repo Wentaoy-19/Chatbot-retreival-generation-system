@@ -1,7 +1,7 @@
 python finetune.py \
     --model_name "t5" \
     --dataset_path "/raid/projects/wentaoy4/save_dataset" \
-    --model_path "/raid/projects/wentaoy4/model_file/models--google--flan-t5-large/snapshots/f5b192378f2e16fb61561ee418736e8c6841c4c8/" \
+    --model_path "google/flan-t5-large" \
     --device "cuda:0" \
     --logger_path "/raid/projects/wentaoy4/log/t5_finetune_b128_e10_lr5e06.log" \
     --saved_model_path "/raid/projects/wentaoy4/model_weight/t5_finetune_b128_e10_lr5e06.pt" \
