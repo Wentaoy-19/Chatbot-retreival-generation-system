@@ -12,3 +12,6 @@
 - run_chatbot.sh : script for running chatbot 
 - run_train_opt.sh : script for finetune opt 
 - run_train_t5.sh : script for finetune t5
+## Dataset 
+- ece_rag_dataset_new : ECE120 course note dataset for DPR. 
+- train_data : ECE120 finetune dataset
