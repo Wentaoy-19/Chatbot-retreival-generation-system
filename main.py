@@ -54,24 +54,12 @@ class ret_gen_model():
         psgs,_,_ = self.retriever.retreive_psg(input_q)
         return psgs
     
-    def gen_response(self,input_q,context):
-        prompt = "Answer question from context\nContext: "+context +"\nQuestion: " + input_q + "\nAnswer:"
-        out_ans = self.gen_model.text_gen(prompt,max_len=250).split("\n")[3]
-        return out_ans
-    
     def gen_response_list(self,input_q,context_list):
         out_list = []
         for i in range(len(context_list)):
             out_ans = self.gen_model.answer_question(context_list[i].replace("\n"," "),input_q.replace("\n"," "))
             out_list.append(out_ans)
         return out_list 
-    
-    def show_single_result(self,user_utter):
-        psg = self.ret_psg(user_utter)
-        out_ans = self.gen_response(user_utter,psg)
-        print("[PASSAGE]: \n" + psg + "\n")
-        print("[RESPONSE]: \n" + out_ans + "\n")
-        return 
     
     def show_list_result(self,user_utter):
         psg_list = self.ret_psg_list(user_utter)
@@ -126,7 +114,6 @@ class ret_gen_model():
             print("[QUESTION REWRITE]: " + user_utter + "\n")
             psg = self.ret_psg(user_utter)
             out_ans = self.gen_model.answer_question(psg,user_utter)
-            # out_ans = self.gen_response(user_utter,psg)
             history_q.put((user_utter,out_ans))
             print("[PASSAGE]: \n" + psg + "\n")
             print("[RESPONSE]: \n" + out_ans + "\n")
