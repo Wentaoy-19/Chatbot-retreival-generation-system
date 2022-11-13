@@ -234,7 +234,7 @@ class t5_finetune_dataset(Dataset):
     def generate_final_data(self):
         final = []
         for i in range(self.data_num):
-            context = self.trun_text(self.converted_dataset[i]['textbook-paragraph'],400)
+            context = self.trun_text(self.converted_dataset[i]['textbook-paragraph'],300)
             question = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['question']
             answer = self.converted_dataset[i]['GPT-3-Semantic-Search-Generations']['answer']
             prompt = self.generate_prompt(context,question)

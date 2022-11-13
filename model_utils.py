@@ -20,7 +20,7 @@ def train_arg_parse():
 
 def main_arg_parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_name',type = str,default = 'opt')
+    parser.add_argument('--model_name',type = str,default = 't5')
     parser.add_argument('--dataset_path',type = str, default = '/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset/')
     parser.add_argument('--index_path',type= str,default = '/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset.faiss' )
     parser.add_argument('--gen_model_path',type = str, default = 'facebook/opt-1.3b')

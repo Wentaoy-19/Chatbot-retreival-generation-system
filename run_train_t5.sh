@@ -1,11 +1,11 @@
 python finetune.py \
     --model_name "t5" \
-    --dataset_path "/raid/projects/wentaoy4/save_dataset" \
+    --dataset_path "./dataset/train_data" \
     --model_path "google/flan-t5-large" \
-    --device "cuda:0" \
-    --logger_path "/raid/projects/wentaoy4/log/t5_finetune_b128_e10_lr5e06.log" \
-    --saved_model_path "/raid/projects/wentaoy4/model_weight/t5_finetune_b128_e10_lr5e06.pt" \
+    --device "cuda:2" \
+    --logger_path "../lgm/data/log/t5_finetune_b128_e20_lr1e05.log" \
+    --saved_model_path "../lgm/data/model_weight/t5_finetune_b128_e20_lr1e05.pt" \
     --batch_size 1 \
     --outer_batch_size 128 \
-    --epochs 10 \
-    --lr 5e-6
+    --epochs 20 \
+    --lr 1e-5
