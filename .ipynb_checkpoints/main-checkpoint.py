@@ -99,7 +99,7 @@ class ret_gen_model():
             user_utter = input("[User Input]: ")
             if(user_utter == "quit"):
                 flag = 0
-                continue 
+                break 
             self.show_list_result(user_utter)
             
         print("[INFO] End Session\n")
@@ -107,7 +107,7 @@ class ret_gen_model():
     def cqa_chatbot(self):
         print("\n\n[INFO] Prototype of QA Chatbot system for ECE120\n\n")
         flag = 1
-        w = 5
+        w = 1
         history_q = his_queue(size = w)
         while(flag):
             user_utter = input("[User Input]: ")
@@ -121,7 +121,8 @@ class ret_gen_model():
                 user_utter = self.qr(user_utter,history_q)
             print("[QUESTION REWRITE]: " + user_utter + "\n")
             psg = self.ret_psg(user_utter)
-            out_ans = self.gen_response(user_utter,psg)
+            out_ans = self.gen_model.answer_question(psg,user_utter)
+            # out_ans = self.gen_response(user_utter,psg)
             history_q.put((user_utter,out_ans))
             print("[PASSAGE]: \n" + psg + "\n")
             print("[RESPONSE]: \n" + out_ans + "\n")
@@ -132,24 +133,15 @@ class ret_gen_model():
 
 
 if __name__ == "__main__":
-    # my_ret = ret_gen_model(dataset_path = "/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset/", index_path = "/home/wentaoy4/lgm/data/convert_dataset/ece_rag_dataset_new/squad-dataset.faiss")
-    # my_ret.get_result("/home/wentaoy4/lgm/qa.csv",delimiter = "?",logger_path = "/home/wentaoy4/lgm/data/logger/metrics_ret_gen.log")
-    # my_ret.get_gpt_dataset_result(json_path = "/home/wentaoy4/UIUC_chatbot_data_generator/Fine_Tuned_Data.json",logger_path="/home/wentaoy4/lgm/data/logger/metrics_ret_gen_gptdata.log")
-    # my_ret.get_gpt_dataset_result(json_path = "/home/wentaoy4/UIUC_chatbot_data_generator/GPT-3_paragraphs.json",logger_path="/home/wentaoy4/lgm/data/logger/metrics_gen_only.log")
-   
-    # my_benchmark = benchmark_gptj("/home/wentaoy4/lgm/data/model_file/EleutherAI--gpt-j-6B.main.918ad376364058dee23512629bc385380c98e57d/")
-    # my_benchmark.eval("/home/wentaoy4/lgm/data/logger/gptj-coqa.log")
-    my_device = torch.device("cuda:1")
-    my_chatbot = ret_gen_model(model_name = "t5",
-                               dataset_path = "./dataset/ece_rag_dataset_new/squad-dataset/", 
-                               index_path = "./dataset/ece_rag_dataset_new/squad-dataset.faiss",
-                               gen_model_path = "/raid/projects/wentaoy4/model_file/models--google--flan-t5-large/snapshots/f5b192378f2e16fb61561ee418736e8c6841c4c8/",
-                               # gen_model_path = "/raid/projects/wentaoy4/model_file/models--facebook--opt-1.3b/snapshots/c8fd4232a5df1e87e06d5cbb9e066c5a114cd4ee/",
-                               gen_cp_path = "/raid/projects/wentaoy4/model_weight/t5_finetune_b128_e10_lr5e06.pt",
-                               # gen_cp_path = "/raid/projects/wentaoy4/model_weight/opt_finetune_b128_e10_lr5e06.pt",
-                               # gen_cp_path = None,
-                               # logger_path = "/raid/projects/wentaoy4/log/chatbot_opt_finetune.log",
-                               logger_path = None,
-                               device=my_device)
+    args = main_arg_parse()
+    my_chatbot = ret_gen_model(
+        model_name=args.model_name,
+        dataset_path = args.dataset_path,
+        index_path = args.index_path,
+        gen_model_path = args.gen_model_path,
+        gen_cp_path = args.gen_cp_path,
+        logger_path = args.logger_path,
+        device = args.device
+    )
     my_chatbot.odqa_chatbot()
     # my_chatbot.cqa_chatbot()

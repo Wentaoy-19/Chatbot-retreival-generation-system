@@ -10,6 +10,7 @@ import json
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import queue
 from transformers import T5Tokenizer, T5ForConditionalGeneration
+from model_utils import *
 
 
 '''
@@ -66,7 +67,8 @@ class opt_model():
         self.tokenizer = GPT2Tokenizer.from_pretrained(model_path)
     def text_gen(self,input_text:str,max_len:int = 200):
         inputs = self.tokenizer(input_text, return_tensors="pt").to(self.device)
-        outputs = self.model.generate(**inputs,max_length = max_len,do_sample = True,early_stopping = False,temperature=0.8, top_p = 0.9)
+        # outputs = self.model.generate(**inputs,max_length = max_len,do_sample = True,early_stopping = False,temperature=0.8, top_p = 0.9)
+        outputs = self.model.generate(**inputs,penalty_alpha=0.6, top_k = 4,max_length=max_len)
         out_text = self.tokenizer.batch_decode(outputs,skip_special_tokens = True)[0]
         return out_text
     def answer_question(self,context:str,question:str,max_len:int = 300):
@@ -96,6 +98,7 @@ class seq2seq_model():
     def generate(self,input_text:str,max_len:int = 100):
         input_ids = self.tokenizer(input_text,return_tensors='pt').input_ids.to(self.device)
         outputs = self.model.generate(input_ids,max_new_tokens = max_len)
+        # outputs = self.model.generate(input_ids,penalty_alpha=0.6, top_k = 4,max_length=max_len)
         out_text = self.tokenizer.batch_decode(outputs,skip_special_tokens =True)[0]
         return out_text
     def answer_question(self,context:str,question:str,max_len:int = 100):

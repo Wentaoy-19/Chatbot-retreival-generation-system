@@ -102,7 +102,7 @@ class ret_gen_model():
             user_utter = input("[User Input]: ")
             if(user_utter == "quit"):
                 flag = 0
-                continue 
+                break 
             self.show_list_result(user_utter)
             
         print("[INFO] End Session\n")
@@ -110,7 +110,7 @@ class ret_gen_model():
     def cqa_chatbot(self):
         print("\n\n[INFO] Prototype of QA Chatbot system for ECE120\n\n")
         flag = 1
-        w = 5
+        w = 1
         history_q = his_queue(size = w)
         while(flag):
             user_utter = input("[User Input]: ")
@@ -124,7 +124,8 @@ class ret_gen_model():
                 user_utter = self.qr(user_utter,history_q)
             print("[QUESTION REWRITE]: " + user_utter + "\n")
             psg = self.ret_psg(user_utter)
-            out_ans = self.gen_response(user_utter,psg)
+            out_ans = self.gen_model.answer_question(psg,user_utter)
+            # out_ans = self.gen_response(user_utter,psg)
             history_q.put((user_utter,out_ans))
             print("[PASSAGE]: \n" + psg + "\n")
             print("[RESPONSE]: \n" + out_ans + "\n")
