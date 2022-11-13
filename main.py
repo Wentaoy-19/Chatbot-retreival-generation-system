@@ -24,6 +24,7 @@ class ret_gen_model():
             self.gen_model.load_checkpoint(gen_cp_path)
         self.retriever = rag_retreiver(dataset_path=dataset_path, index_path= index_path,device = self.device)
         self.qr_model = qr_model(self.device)
+        self.re_ranker = re_ranker(self.device)
         if(logger_path != None):
             self.logger = get_logger(logger_path)
         else:
@@ -75,7 +76,7 @@ class ret_gen_model():
     def show_list_result(self,user_utter):
         psg_list = self.ret_psg_list(user_utter)
         ans_list = self.gen_response_list(user_utter,psg_list)
-        scr_list = re_ranker(user_utter, ans_list)
+        scr_list = self.re_ranker.rank(user_utter, ans_list)
         print("[PASSAGE]: \n")
         for i in range(len(psg_list)):
             print("-----Passage " + str(i) + "-----\n")
