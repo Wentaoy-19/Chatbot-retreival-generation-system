@@ -18,7 +18,7 @@ class re_ranker():
         self.device = device 
         self.model = AutoModelForSequenceClassification.from_pretrained('cross-encoder/ms-marco-MiniLM-L-6-v2').to(self.device)
         self.model.eval()
-        self.tokenizer = rerank_msmarco_tokenizer = AutoTokenizer.from_pretrained('cross-encoder/ms-marco-MiniLM-L-6-v2')
+        self.tokenizer = AutoTokenizer.from_pretrained('cross-encoder/ms-marco-MiniLM-L-6-v2')
     def rank(self,user_question:str = "", response_list = [] ):
         features = self.tokenizer([user_question] * len(response_list), response_list,  padding=True, truncation=True, return_tensors="pt").to(self.device)
         with torch.no_grad():
