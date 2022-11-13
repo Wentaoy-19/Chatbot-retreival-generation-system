@@ -3,8 +3,8 @@ python finetune.py \
     --dataset_path "./dataset/train_data" \
     --model_path "google/flan-t5-large" \
     --device "cuda:2" \
-    --logger_path "../lgm/data/log/t5_finetune_b128_e20_lr1e05.log" \
-    --saved_model_path "../lgm/data/model_weight/t5_finetune_b128_e20_lr1e05.pt" \
+    --logger_path "../t5_finetune_b128_e20_lr1e05.log" \
+    --saved_model_path "../t5_finetune_b128_e20_lr1e05.pt" \
     --batch_size 1 \
     --outer_batch_size 128 \
     --epochs 20 \
