@@ -96,7 +96,7 @@ class ret_gen_model():
     def cqa_chatbot(self):
         print("\n\n[INFO] Prototype of QA Chatbot system for ECE120\n\n")
         flag = 1
-        w = 1
+        w = 5
         history_q = his_queue(size = w)
         while(flag):
             user_utter = input("[User Input]: ")
