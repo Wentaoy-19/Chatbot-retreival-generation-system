@@ -27,6 +27,7 @@ def main_arg_parse():
     parser.add_argument('--gen_cp_path',type = str,default = None)
     parser.add_argument('--logger_path',type = str, default = None)
     parser.add_argument('--device',type = str,default = 'cuda:0')
+    parser.add_argument('--task',type=str,default ='odqa')
     args = parser.parse_args()
     return args
     
@@ -52,6 +53,8 @@ def f_score(hypothesis,reference):
     return scores[0]['rouge-l']['f']
 
 
+# dialog history queue 
+# each item: (q,a)
 class his_queue():
     def __init__(self,size):
         super(his_queue,self).__init__()

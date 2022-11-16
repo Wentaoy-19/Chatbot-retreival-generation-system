@@ -6,10 +6,11 @@
 - finetune.py : finetune function for t5/opt 
 - model_utils.py : helper functions for module 
 - data_utils.py : helper function/classes for training data 
-- opt_finetune.py : not used 
 ## Scripts 
 - push_all.sh : push codes on github 
-- run_chatbot.sh : script for running chatbot 
+- run_chatbot.sh : script for running chatbot  
+    - For single turn QA, use `--task 'odqa'`, for Conversational QA, use `--task 'cqa'` in script.
+    - To serve OPT as generator, use `--gen_model_path "facebook/opt-1.3b"` and `--model_name "opt"` ; to use Flan-T5, change them to `--gen_model_path "google/flan-t5-large"` and `--model_name t5`
 - run_train_opt.sh : script for finetune opt 
 - run_train_t5.sh : script for finetune t5
 ## Dataset 

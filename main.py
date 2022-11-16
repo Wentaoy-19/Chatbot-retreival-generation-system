@@ -4,9 +4,6 @@ import logging
 from module import * 
 from model_utils import *
 from reranker import *
-# '''
-#     Helper Functions/classes
-# '''
         
 """
     Main Ret-Gen Model with odqa/cqa
@@ -131,4 +128,7 @@ if __name__ == "__main__":
         logger_path = args.logger_path,
         device = args.device
     )
-    my_chatbot.odqa_chatbot()
+    if(args.task == 'odqa'):
+        my_chatbot.odqa_chatbot()
+    elif(args.task == 'cqa'):
+        my_chatbot.cqa_chatbot()

@@ -164,7 +164,7 @@ def convert_dic_json(dic:dict,path):
 def load_converted_dataset(path:str):
     return load_from_disk(path)
 
-def opt_json2dataset(original_path,saved_json_path, saved_dataset_path):
+def json2dataset(original_path,saved_json_path, saved_dataset_path):
     temp = json2dic(original_path)
     temp = {"data":temp}
     convert_dic_json(temp,saved_json_path)
@@ -249,7 +249,7 @@ class t5_finetune_dataset(Dataset):
 
 
 if __name__ == "__main__":
-    opt_json2dataset('../data-generator/prompt_engineering/gpt-3_semantic_search/GPT-3_semantic_search.json',saved_json_path = "./saved.json", saved_dataset_path ="./save_dataset")
+    json2dataset('./dataset/GPT-3_semantic_search.json',saved_json_path = "./dataset/saved.json", saved_dataset_path ="./train_data")
 
 
     
