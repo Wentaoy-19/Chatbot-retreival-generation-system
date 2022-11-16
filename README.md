@@ -20,7 +20,7 @@
         - `--logger_path`: Path to save training log.
         - `--saved_model_path`: Path to save fine-tuned weight.
         - `--outer_batch_size`: "Batch size" for Gradient
-        - `--dataset_path`: Path to converted training dataset, same path to `--saved_dataset_path` from `run_convert_dataset.sh`.Default ./dataset/train_data
+        - `--dataset_path`: Path to converted training dataset, same path as `--saved_dataset_path` from `run_convert_dataset.sh`.Default ./dataset/train_data
         - `--epochs`: fine-tuning epochs 
         - `--lr`: learning rate 
     - **Since training data is very large, the Gradient accumulation is applied in the code. Stay** `--batch_size 1` **to avoid OUT_OF_MEMORY issue. Change** `--outer_batch_size` **to adjust the "batch size" for training.**
