@@ -15,6 +15,16 @@ from huggingface_hub import snapshot_download
 from transformers import DataCollatorForLanguageModeling
 from torch.utils.data import Dataset, DataLoader
 import torch
+import argparse
+
+
+def data_arg_parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--original_json_path',type=str,default = './dataset/GPT-3_semantic_search.json')
+    parser.add_argument('--convert_json_path',type = str,default = './dataset/GPT-3_converted.json')
+    parser.add_argument('--saved_dataset_path',type = str,default = './dataset/train_data')
+    args = parser.parse_args()
+    return args 
 
 
 # # tokenizer = GPT2Tokenizer.from_pretrained("facebook/opt-1.3b")
@@ -249,7 +259,8 @@ class t5_finetune_dataset(Dataset):
 
 
 if __name__ == "__main__":
-    json2dataset('./dataset/GPT-3_semantic_search.json',saved_json_path = "./dataset/saved.json", saved_dataset_path ="./train_data")
+    args = data_arg_parse()
+    json2dataset(args.original_json_path,saved_json_path = args.convert_json_path, saved_dataset_path =args.saved_dataset_path)
 
 
     
