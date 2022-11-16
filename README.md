@@ -9,10 +9,20 @@
 ## Scripts 
 - push_all.sh : push codes on github 
 - run_chatbot.sh : script for running chatbot  
-    - For single turn QA, use `--task 'odqa'`, for Conversational QA, use `--task 'cqa'` in script.
+    - For single turn QA, use `--task 'odqa'`. For Conversational QA, use `--task 'cqa'` in script.
     - To serve OPT as generator, use `--gen_model_path "facebook/opt-1.3b"` and `--model_name "opt"` ; to use Flan-T5, change them to `--gen_model_path "google/flan-t5-large"` and `--model_name t5`
+    - To load fine-tuned weight file, add `--gen_cp_path <path_to_weight>`. Without this line the pretrained weight of the model will be loaded.
 - run_train_opt.sh : script for finetune opt 
+    - Feel free to change: 
+        - `--device`: The GPU# for training.
+        - `--logger_path`: Path to save training log.
+        - `--saved_model_path`: Path to save fine-tuned weight.
+        - `--outer_batch_size`: "Batch size" for Gradient accumulation.
+        - `--epochs`: fine-tuning epochs 
+        - `--lr`: learning rate 
+    - Since training data is very large, the Gradient accumulation is applied in the code. Stay `--batch_size 1` to avoid OUT_OF_MEMORY issue.
 - run_train_t5.sh : script for finetune t5
+    - Same as `run_train_opt.sh`
 ## Dataset 
 - ece_rag_dataset_new : ECE120 course note dataset for DPR. 
 - train_data : ECE120 finetune dataset
