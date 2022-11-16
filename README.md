@@ -20,7 +20,7 @@
         - `--outer_batch_size`: "Batch size" for Gradient accumulation.
         - `--epochs`: fine-tuning epochs 
         - `--lr`: learning rate 
-    - Since training data is very large, the Gradient accumulation is applied in the code. Stay `--batch_size 1` to avoid OUT_OF_MEMORY issue.
+    - Since training data is very large, the Gradient accumulation is applied in the code. Stay `--batch_size 1` to avoid OUT_OF_MEMORY issue. Change `--outer_batch_size` to adjust the "batch size" for training.
 - run_train_t5.sh : script for finetune t5
     - Same as `run_train_opt.sh`
 ## Dataset 
