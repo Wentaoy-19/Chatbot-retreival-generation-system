@@ -16,7 +16,7 @@
     - To load fine-tuned weight file, add `--gen_cp_path <path_to_weight>`. Without this line the pretrained weight of the model will be loaded.
 - `run_train_opt.sh` : script for finetune opt 
     - Feel free to change: 
-        - `--device`: The GPU# for training.
+        - ``--device``: The GPU# for training.
         - `--logger_path`: Path to save training log.
         - `--saved_model_path`: Path to save fine-tuned weight.
         - `--outer_batch_size`: "Batch size" for Gradient
