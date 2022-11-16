@@ -1,11 +1,11 @@
 # retreival-generation-system
 
 ## Code files
-- main.py : main function for odqa/cqa chatbot 
-- module.py : chatbot module classes 
-- finetune.py : finetune function for t5/opt 
-- model_utils.py : helper functions for module 
-- data_utils.py : helper function/classes for training data 
+- `main.py` : main function for odqa/cqa chatbot 
+- `module.py` : chatbot module classes 
+- `finetune.py` : finetune function for t5/opt 
+- `model_utils.py` : helper functions for module 
+- `data_utils.py` : helper function/classes for training data 
 ## Scripts 
 - `push_all.sh` : push codes on github 
 - `run_chatbot.sh` : script for running chatbot  
