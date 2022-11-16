@@ -16,7 +16,7 @@
     - To load fine-tuned weight file, add `--gen_cp_path <path_to_weight>`. Without this line the pretrained weight of the model will be loaded.
 - `run_train_opt.sh` : script for finetune opt 
     - Feel free to change: 
-        - ``--device``: The GPU# for training.
+        - `--device`: The GPU# for training.
         - `--logger_path`: Path to save training log.
         - `--saved_model_path`: Path to save fine-tuned weight.
         - `--outer_batch_size`: "Batch size" for Gradient
@@ -35,3 +35,8 @@
 - ece_rag_dataset_new : ECE120 course note dataset for DPR. 
 - train_data : ECE120 finetune dataset, converted from GPT-3_semantic_search.json
 - GPT-3_semantic_search.json: GPT-3 generated dataset for training. 
+
+## Issues
+1. The context in training data is too large,truncate text may cause problem. (change the number in data_utils.py, line 247 to change the truncated size)
+2. Max input Length for T5 is only 512, fine-tuning may work, but it may lead to accurate issues. 
+3. Entity Extractor for dialog in progress.
