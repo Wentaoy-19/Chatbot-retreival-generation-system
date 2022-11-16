@@ -6,6 +6,8 @@
 - `finetune.py` : finetune function for t5/opt 
 - `model_utils.py` : helper functions for module 
 - `data_utils.py` : helper function/classes for training data 
+- `reranker.py`: ranker for response quality, loaded from main_fn
+- `entity_tracker.py`: entity tracker for dialog(in progress)
 ## Scripts 
 - `push_all.sh` : push codes on github 
 - `run_chatbot.sh` : script for running chatbot  
