@@ -37,6 +37,6 @@
 - GPT-3_semantic_search.json: GPT-3 generated dataset for training. 
 
 ## Issues
-1. The context in training data is too large,truncate text may cause problem. (change the number in data_utils.py, line 247 to change the truncated size)
+1. The context in training data is too large,truncate text may cause problem. (change the number in data_utils.py, line 214/247 to change the truncated size)
 2. Max input Length for T5 is only 512, fine-tuning may work, but it may lead to accurate issues. 
 3. Entity Extractor for dialog in progress.
