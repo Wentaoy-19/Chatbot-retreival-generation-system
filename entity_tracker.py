@@ -1,10 +1,13 @@
 import numpy
 import openai
+from modue import qr_model
+import torch
 
 class entity_tracker():
     def __init__(self, topic=None):
         self.history = []
         self.topic = topic
+        self.qr_model = qr_model(device = torch.device(cuda:0))
         
     def get_response(self, prompt):
         completion = openai.Completion.create(
@@ -78,6 +81,7 @@ class entity_tracker():
     
     def main(self, user_utter):
         # user_utter = self.question_rewrite(user_utter) ## modify the function before you activate this line
+        user_utter = self.qr_model.qr(self.history,user_utter)
         if self.topic_judge(user_utter):
             self.history.append(user_utter)
         else:
