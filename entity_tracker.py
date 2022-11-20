@@ -1,6 +1,6 @@
 import numpy
 import openai
-from modue import qr_model
+from module import qr_model
 import torch
 
 class entity_tracker():
