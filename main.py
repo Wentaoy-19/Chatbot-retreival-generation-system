@@ -4,9 +4,6 @@ import logging
 from module import * 
 from model_utils import *
 from reranker import *
-# '''
-#     Helper Functions/classes
-# '''
         
 """
     Main Ret-Gen Model with odqa/cqa
@@ -24,6 +21,7 @@ class ret_gen_model():
             self.gen_model.load_checkpoint(gen_cp_path)
         self.retriever = rag_retreiver(dataset_path=dataset_path, index_path= index_path,device = self.device)
         self.qr_model = qr_model(self.device)
+        self.re_ranker = re_ranker(self.device)
         if(logger_path != None):
             self.logger = get_logger(logger_path)
         else:
@@ -53,11 +51,6 @@ class ret_gen_model():
         psgs,_,_ = self.retriever.retreive_psg(input_q)
         return psgs
     
-    def gen_response(self,input_q,context):
-        prompt = "Answer question from context\nContext: "+context +"\nQuestion: " + input_q + "\nAnswer:"
-        out_ans = self.gen_model.text_gen(prompt,max_len=250).split("\n")[3]
-        return out_ans
-    
     def gen_response_list(self,input_q,context_list):
         out_list = []
         for i in range(len(context_list)):
@@ -65,17 +58,10 @@ class ret_gen_model():
             out_list.append(out_ans)
         return out_list 
     
-    def show_single_result(self,user_utter):
-        psg = self.ret_psg(user_utter)
-        out_ans = self.gen_response(user_utter,psg)
-        print("[PASSAGE]: \n" + psg + "\n")
-        print("[RESPONSE]: \n" + out_ans + "\n")
-        return 
-    
     def show_list_result(self,user_utter):
         psg_list = self.ret_psg_list(user_utter)
         ans_list = self.gen_response_list(user_utter,psg_list)
-        scr_list = re_ranker(user_utter, ans_list)
+        scr_list = self.re_ranker.rank(user_utter, ans_list)
         print("[PASSAGE]: \n")
         for i in range(len(psg_list)):
             print("-----Passage " + str(i) + "-----\n")
@@ -110,7 +96,7 @@ class ret_gen_model():
     def cqa_chatbot(self):
         print("\n\n[INFO] Prototype of QA Chatbot system for ECE120\n\n")
         flag = 1
-        w = 1
+        w = 5
         history_q = his_queue(size = w)
         while(flag):
             user_utter = input("[User Input]: ")
@@ -125,7 +111,6 @@ class ret_gen_model():
             print("[QUESTION REWRITE]: " + user_utter + "\n")
             psg = self.ret_psg(user_utter)
             out_ans = self.gen_model.answer_question(psg,user_utter)
-            # out_ans = self.gen_response(user_utter,psg)
             history_q.put((user_utter,out_ans))
             print("[PASSAGE]: \n" + psg + "\n")
             print("[RESPONSE]: \n" + out_ans + "\n")
@@ -143,4 +128,7 @@ if __name__ == "__main__":
         logger_path = args.logger_path,
         device = args.device
     )
-    my_chatbot.odqa_chatbot()
+    if(args.task == 'odqa'):
+        my_chatbot.odqa_chatbot()
+    elif(args.task == 'cqa'):
+        my_chatbot.cqa_chatbot()

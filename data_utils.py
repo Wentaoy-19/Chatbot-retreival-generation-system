@@ -15,6 +15,16 @@ from huggingface_hub import snapshot_download
 from transformers import DataCollatorForLanguageModeling
 from torch.utils.data import Dataset, DataLoader
 import torch
+import argparse
+
+
+def data_arg_parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--original_json_path',type=str,default = './dataset/GPT-3_semantic_search.json')
+    parser.add_argument('--convert_json_path',type = str,default = './dataset/GPT-3_converted.json')
+    parser.add_argument('--saved_dataset_path',type = str,default = './dataset/train_data')
+    args = parser.parse_args()
+    return args 
 
 
 # # tokenizer = GPT2Tokenizer.from_pretrained("facebook/opt-1.3b")
@@ -164,7 +174,7 @@ def convert_dic_json(dic:dict,path):
 def load_converted_dataset(path:str):
     return load_from_disk(path)
 
-def opt_json2dataset(original_path,saved_json_path, saved_dataset_path):
+def json2dataset(original_path,saved_json_path, saved_dataset_path):
     temp = json2dic(original_path)
     temp = {"data":temp}
     convert_dic_json(temp,saved_json_path)
@@ -249,7 +259,8 @@ class t5_finetune_dataset(Dataset):
 
 
 if __name__ == "__main__":
-    opt_json2dataset('../data-generator/prompt_engineering/gpt-3_semantic_search/GPT-3_semantic_search.json',saved_json_path = "./saved.json", saved_dataset_path ="./save_dataset")
+    args = data_arg_parse()
+    json2dataset(args.original_json_path,saved_json_path = args.convert_json_path, saved_dataset_path =args.saved_dataset_path)
 
 
     
