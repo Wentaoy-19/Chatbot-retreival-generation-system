@@ -7,7 +7,7 @@ class entity_tracker():
     def __init__(self, topic=None):
         self.history = []
         self.topic = topic
-        self.qr_model = qr_model(device = torch.device(cuda:0))
+        self.qr_model = qr_model(device = torch.device("cuda:0"))
         
     def get_response(self, prompt):
         completion = openai.Completion.create(
