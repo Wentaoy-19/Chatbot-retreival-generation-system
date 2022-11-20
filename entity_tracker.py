@@ -85,7 +85,7 @@ class entity_tracker():
         if self.topic_judge(user_utter):
             self.history.append(user_utter)
         else:
-            self.topic = et.determine_topic(user_utter)
+            self.topic = self.determine_topic(user_utter)
             self.history = [user_utter]
         return user_utter, self.topic, self.history
         

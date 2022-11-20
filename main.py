@@ -4,6 +4,7 @@ import logging
 from module import * 
 from model_utils import *
 from reranker import *
+from entity_tracker import *
         
 """
     Main Ret-Gen Model with odqa/cqa
@@ -22,6 +23,7 @@ class ret_gen_model():
         self.retriever = rag_retreiver(dataset_path=dataset_path, index_path= index_path,device = self.device)
         self.qr_model = qr_model(self.device)
         self.re_ranker = re_ranker(self.device)
+        self.entity_tracker = entity_tracker("turing machine")
         if(logger_path != None):
             self.logger = get_logger(logger_path)
         else:
@@ -96,22 +98,17 @@ class ret_gen_model():
     def cqa_chatbot(self):
         print("\n\n[INFO] Prototype of QA Chatbot system for ECE120\n\n")
         flag = 1
-        w = 5
-        history_q = his_queue(size = w)
         while(flag):
             user_utter = input("[User Input]: ")
             if(user_utter == "quit"):
                 flag = 0
                 continue 
-            if(user_utter == "clear"):
-                history_q.clear()
-                continue
-            if(history_q.num != 0):
-                user_utter = self.qr(user_utter,history_q)
+            user_utter, topic, history = self.entity_tracker.main(user_utter)
             print("[QUESTION REWRITE]: " + user_utter + "\n")
+            print("[TOPIC]: "+ topic + "\n")
             psg = self.ret_psg(user_utter)
             out_ans = self.gen_model.answer_question(psg,user_utter)
-            history_q.put((user_utter,out_ans))
+            self.entity_tracker.answer_attach(out_ans)
             print("[PASSAGE]: \n" + psg + "\n")
             print("[RESPONSE]: \n" + out_ans + "\n")
             
@@ -132,3 +129,4 @@ if __name__ == "__main__":
         my_chatbot.odqa_chatbot()
     elif(args.task == 'cqa'):
         my_chatbot.cqa_chatbot()
+    
