@@ -30,7 +30,7 @@
     - `--original_json_path`: Path to GPT-3 generated data. The default dataset is `GPT-3_semantic_search.json`.
     - `--converted_json_path`: Path to converted Json format of dataset. 
     - `--saved_dataset_path`: Path to save converted dataset
-## Dataset 
+## Dataset (Private data, removed)
 - ece_rag_dataset_new : ECE120 course note dataset for DPR. 
 - train_data : ECE120 finetune dataset, converted from GPT-3_semantic_search.json
 - GPT-3_semantic_search.json: GPT-3 generated dataset for training. 
