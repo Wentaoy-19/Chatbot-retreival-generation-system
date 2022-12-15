@@ -1,4 +1,4 @@
-# retreival-generation-system
+# retreival-generation-system (Demo only)
 
 ## Code files
 - `main.py` : main function for odqa/cqa chatbot 
